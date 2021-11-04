@@ -12,7 +12,7 @@ import dalvik.system.PathClassLoader;
 
 /**
  * @创建者 CSDN_LQR
- * @描述 热修复工具(只认后缀是dex、apk、jar、zip的补丁)
+ * @描述 热修复工具(只认后缀是dex 、 apk 、 jar 、 zip的补丁)
  */
 public class FixDexUtils {
 
@@ -50,17 +50,19 @@ public class FixDexUtils {
         // 遍历所有的修复dex
         File fileDir = patchFilesDir != null ? patchFilesDir : new File(context.getFilesDir(), DEX_DIR);// data/data/包名/files/odex（这个可以任意位置）
         File[] listFiles = fileDir.listFiles();
-        for (File file : listFiles) {
-            if (file.getName().startsWith("classes") &&
-                    (file.getName().endsWith(DEX_SUFFIX)
-                            || file.getName().endsWith(APK_SUFFIX)
-                            || file.getName().endsWith(JAR_SUFFIX)
-                            || file.getName().endsWith(ZIP_SUFFIX))) {
-                loadedDex.add(file);// 存入集合
+        if (listFiles != null && listFiles.length > 0) {
+            for (File file : listFiles) {
+                if (file.getName().startsWith("classes") &&
+                        (file.getName().endsWith(DEX_SUFFIX)
+                                || file.getName().endsWith(APK_SUFFIX)
+                                || file.getName().endsWith(JAR_SUFFIX)
+                                || file.getName().endsWith(ZIP_SUFFIX))) {
+                    loadedDex.add(file);// 存入集合
+                }
             }
+            // dex合并之前的dex
+            doDexInject(context, loadedDex);
         }
-        // dex合并之前的dex
-        doDexInject(context, loadedDex);
     }
 
     private static void doDexInject(Context appContext, HashSet<File> loadedDex) {

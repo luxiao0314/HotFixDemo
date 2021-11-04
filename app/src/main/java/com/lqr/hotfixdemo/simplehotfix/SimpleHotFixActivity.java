@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.lqr.hotfixdemo.R;
 
@@ -18,7 +19,8 @@ public class SimpleHotFixActivity extends AppCompatActivity {
     }
 
     public void fix(View view) {
-        FixDexUtils.loadFixedDex(this, Environment.getExternalStorageDirectory());
+        SpUtils.put("patch_path", Environment.getExternalStorageDirectory().getAbsolutePath());
+        Toast.makeText(this, "重启app生效", Toast.LENGTH_SHORT).show();
     }
 
     public void clac(View view) {
