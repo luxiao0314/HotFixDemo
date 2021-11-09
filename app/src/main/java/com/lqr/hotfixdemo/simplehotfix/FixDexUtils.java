@@ -83,14 +83,19 @@ public class FixDexUtils {
                         pathLoader// 父类加载器
                 );
                 // 3.合并
+                //补丁dexPathList
                 Object dexPathList = getPathList(dexLoader);
+                //系统dexPathList
                 Object pathPathList = getPathList(pathLoader);
+                //获取补丁dexElements
                 Object leftDexElements = getDexElements(dexPathList);
+                //获取系统dexElements
                 Object rightDexElements = getDexElements(pathPathList);
-                // 合并完成
+                // 合并补丁和系统dexElements
                 Object dexElements = combineArray(leftDexElements, rightDexElements);
-                // 重写给PathList里面的Element[] dexElements;赋值
+                //一定要再重新获取一遍App中的原有的pathList，不要复用前面的pathPathList，绝对会报错（Class ref in pre-verified class resolved to unexpected implementation）。
                 Object pathList = getPathList(pathLoader);
+                // 重写给PathList里面的Element[] dexElements;赋值,
                 setField(pathList, pathList.getClass(), "dexElements", dexElements);
             }
         } catch (Exception e) {
